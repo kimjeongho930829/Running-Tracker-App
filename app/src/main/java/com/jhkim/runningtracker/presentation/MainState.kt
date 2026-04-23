@@ -13,4 +13,6 @@ data class MainState(
     val trackingState: TrackingState = TrackingState(),
     val selectedRun: Run? = null,
     val displayPathPoints: List<LocationPoint> = listOf(),
+
+    val isGpsMockingEnabled: Boolean = false
 )
