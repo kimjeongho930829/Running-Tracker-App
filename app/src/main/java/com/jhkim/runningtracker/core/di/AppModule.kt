@@ -5,6 +5,9 @@ import com.jhkim.runningtracker.domain.repository.RunRepository
 import com.jhkim.runningtracker.domain.use_case.DeleteRunUseCase
 import com.jhkim.runningtracker.domain.use_case.GetRunsUseCase
 import com.jhkim.runningtracker.domain.use_case.SaveRunUseCase
+import com.jhkim.runningtracker.presentation.MainViewModel
+import com.jhkim.runningtracker.presentation.service.TrackingManager
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
@@ -13,4 +16,15 @@ val appModule = module {
     single { DeleteRunUseCase(get()) }
     single { GetRunsUseCase(get()) }
     single { SaveRunUseCase(get()) }
+
+    single { TrackingManager() }
+
+    viewModel {
+        MainViewModel(
+            saveRunUseCase = get(),
+            deleteRunUseCase = get(),
+            getRunsUseCase = get(),
+            trackingManager = get(),
+        )
+    }
 }

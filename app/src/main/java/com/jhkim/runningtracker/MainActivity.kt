@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.Text
+import com.jhkim.runningtracker.presentation.MainRoot
 import com.jhkim.runningtracker.ui.theme.RunningTrackerTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             RunningTrackerTheme {
-                Text("Hello World")
+                MainRoot()
             }
         }
     }

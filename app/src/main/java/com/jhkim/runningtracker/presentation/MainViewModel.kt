@@ -9,6 +9,7 @@ import com.jhkim.runningtracker.domain.model.SortType
 import com.jhkim.runningtracker.domain.use_case.DeleteRunUseCase
 import com.jhkim.runningtracker.domain.use_case.GetRunsUseCase
 import com.jhkim.runningtracker.domain.use_case.SaveRunUseCase
+import com.jhkim.runningtracker.presentation.service.TrackingManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +29,7 @@ class MainViewModel(
     private val saveRunUseCase: SaveRunUseCase,
     private val deleteRunUseCase: DeleteRunUseCase,
     private val getRunsUseCase: GetRunsUseCase,
+    private val trackingManager: TrackingManager,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(MainState())
@@ -38,6 +40,7 @@ class MainViewModel(
 
     init {
         observeRunsSortType()
+        observeTrackingState()
     }
 
     fun onAction(action: MainAction) {
@@ -57,8 +60,14 @@ class MainViewModel(
             if (!isTracking) {
                 _state.update { it.copy(selectedRun = null) }
                 _event.emit(MainEvent.StartTracking)
+
+                // TODO: Refactoring
+                trackingManager.updateTrackingState(true)
             } else {
                 _event.emit(MainEvent.StopTracking)
+
+                // TODO: Refactoring
+                trackingManager.updateTrackingState(false)
             }
         }
     }
@@ -113,5 +122,18 @@ class MainViewModel(
             .flatMapLatest { sortType -> getRunsUseCase.execute(sortType) }
             .onEach { runs -> _state.update { it.copy(runs = runs.toList()) } }
             .launchIn(viewModelScope)
+    }
+
+    private fun observeTrackingState() {
+        trackingManager.state.onEach { tracingState ->
+            _state.update {
+                it.copy(
+                    trackingState = tracingState,
+                    displayPathPoints = if (tracingState.isTracking)
+                        tracingState.pathPoints
+                    else it.displayPathPoints
+                )
+            }
+        }.launchIn(viewModelScope)
     }
 }
