@@ -60,14 +60,8 @@ class MainViewModel(
             if (!isTracking) {
                 _state.update { it.copy(selectedRun = null) }
                 _event.emit(MainEvent.StartTracking)
-
-                // TODO: Refactoring
-                trackingManager.updateTrackingState(true)
             } else {
                 _event.emit(MainEvent.StopTracking)
-
-                // TODO: Refactoring
-                trackingManager.updateTrackingState(false)
             }
         }
     }
