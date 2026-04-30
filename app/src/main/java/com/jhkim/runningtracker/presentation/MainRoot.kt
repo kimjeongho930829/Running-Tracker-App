@@ -19,19 +19,21 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jhkim.runningtracker.presentation.component.LogMapRenderer
 import com.jhkim.runningtracker.presentation.component.MapRenderer
 import com.jhkim.runningtracker.presentation.service.TrackingService
-import com.jhkim.runningtracker.presentation.service.TrackingState
 import com.jhkim.runningtracker.ui.theme.AppTheme
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -41,6 +43,7 @@ fun MainRoot(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    val snackHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
     val permissions = mutableListOf(
@@ -72,7 +75,7 @@ fun MainRoot(
         viewModel.event.collect{ event ->
             when (event) {
                 is MainEvent.PermissionRequired -> TODO()
-                MainEvent.RunSaved -> TODO()
+                MainEvent.RunSaved -> { launch { snackHostState.showSnackbar("운동 기록이 저장되었습니다.") } }
                 is MainEvent.ShowSnackbar -> TODO()
                 MainEvent.StartTracking -> {
                     val hasAllPermissions = permissions.all {
@@ -99,6 +102,7 @@ fun MainRoot(
     }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackHostState) },
         floatingActionButton = {
             AnimatedVisibility(
                 visible = !state.trackingState.isTracking,

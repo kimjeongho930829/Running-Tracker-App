@@ -10,8 +10,10 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.jhkim.runningtracker.MainActivity
 import com.jhkim.runningtracker.R
+import org.koin.android.ext.android.inject
 
 class TrackingService : Service() {
+    private val trackingManager: TrackingManager by inject()
 
     override fun onBind(intent: Intent): IBinder? = null
 
@@ -50,6 +52,7 @@ class TrackingService : Service() {
             .build()
 
         startForeground(NOTIFICATION_ID, notification)
+        trackingManager.updateTrackingState(true)
     }
 
     private fun createNotificationChannel(notificationManager: NotificationManager) {
@@ -77,6 +80,7 @@ class TrackingService : Service() {
     }
 
     private fun stopForegroundService() {
+        trackingManager.updateTrackingState(false)
         stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf()
     }
