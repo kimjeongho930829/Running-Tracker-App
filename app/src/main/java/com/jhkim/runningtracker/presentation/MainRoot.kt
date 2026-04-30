@@ -29,17 +29,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.jhkim.runningtracker.presentation.component.LogMapRenderer
 import com.jhkim.runningtracker.presentation.component.MapRenderer
 import com.jhkim.runningtracker.presentation.service.TrackingService
 import com.jhkim.runningtracker.ui.theme.AppTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 @Composable
 fun MainRoot(
     viewModel: MainViewModel = koinViewModel(),
-    mapRenderer: MapRenderer = LogMapRenderer(),
+    mapRenderer: MapRenderer = koinInject(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 

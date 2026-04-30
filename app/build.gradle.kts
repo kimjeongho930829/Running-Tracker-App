@@ -1,3 +1,12 @@
+import java.util.Properties
+
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use { load(it) }
+    }
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -39,7 +48,9 @@ android {
     }
 
     flavorDimensions += "environment"
+    flavorDimensions += "map"
     productFlavors {
+        // environment
         create("dev") {
             dimension = "environment"
             applicationIdSuffix = ".dev"
@@ -52,6 +63,23 @@ android {
         }
         create("prod") {
             dimension = "environment"
+        }
+
+        // map
+        create("google") {
+            dimension = "map"
+            manifestPlaceholders["MAP_KEY_NAME"] = "com.naver.maps.map.NCP_KEY_ID"
+            manifestPlaceholders["MAP_KEY_VALUE"] = localProperties.getProperty("NAVER_CLIENT_ID") ?: ""
+        }
+        create("naver") {
+            dimension = "map"
+            manifestPlaceholders["MAP_KEY_NAME"] = "com.naver.maps.map.NCP_KEY_ID"
+            manifestPlaceholders["MAP_KEY_VALUE"] = localProperties.getProperty("NAVER_CLIENT_ID") ?: ""
+        }
+        create("noMap") {
+            dimension = "map"
+            manifestPlaceholders["MAP_KEY_NAME"] = "com.naver.maps.map.NCP_KEY_ID"
+            manifestPlaceholders["MAP_KEY_VALUE"] = localProperties.getProperty("NAVER_CLIENT_ID") ?: ""
         }
     }
 }
@@ -83,4 +111,6 @@ dependencies {
 
     // icon
     implementation(libs.androidx.compose.material.icons.extended)
+
+    "naverImplementation"("com.naver.maps:map-sdk:3.23.2")
 }
