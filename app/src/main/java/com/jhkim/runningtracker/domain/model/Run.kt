@@ -1,7 +1,5 @@
 package com.jhkim.runningtracker.domain.model
 
-import com.jhkim.runningtracker.domain.location.LocationPoint
-
 data class Run(
     val id: Int? = null,
     val distanceInMeters: Double = 0.0,

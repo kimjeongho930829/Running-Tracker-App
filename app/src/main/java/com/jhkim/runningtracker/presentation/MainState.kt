@@ -1,6 +1,6 @@
 package com.jhkim.runningtracker.presentation
 
-import com.jhkim.runningtracker.domain.location.LocationPoint
+import com.jhkim.runningtracker.domain.model.LocationPoint
 import com.jhkim.runningtracker.domain.model.GpsStatus
 import com.jhkim.runningtracker.domain.model.Run
 import com.jhkim.runningtracker.domain.model.SortType

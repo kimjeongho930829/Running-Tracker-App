@@ -2,7 +2,7 @@ package com.jhkim.runningtracker.presentation.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import com.jhkim.runningtracker.domain.location.LocationPoint
+import com.jhkim.runningtracker.domain.model.LocationPoint
 
 @Stable
 interface MapRenderer {

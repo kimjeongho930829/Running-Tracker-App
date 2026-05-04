@@ -1,6 +1,6 @@
 package com.jhkim.runningtracker.presentation.service
 
-import com.jhkim.runningtracker.domain.location.LocationPoint
+import com.jhkim.runningtracker.domain.model.LocationPoint
 
 data class TrackingState(
     val isTracking: Boolean = false,

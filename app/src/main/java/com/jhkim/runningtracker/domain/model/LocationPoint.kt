@@ -1,4 +1,4 @@
-package com.jhkim.runningtracker.domain.location
+package com.jhkim.runningtracker.domain.model
 
 data class LocationPoint(
     val latitude: Double,

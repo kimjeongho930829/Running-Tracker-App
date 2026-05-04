@@ -21,7 +21,10 @@ val appModule = module {
     single { SaveRunUseCase(get()) }
 
     single { RunningTimer() }
-    single { TrackingManager(get()) }
+    single { TrackingManager(
+        locationClient = get(),
+        runningTimer = get(),
+    ) }
     single { TrackingNotificationHelper(androidContext()) }
 
     viewModel {
