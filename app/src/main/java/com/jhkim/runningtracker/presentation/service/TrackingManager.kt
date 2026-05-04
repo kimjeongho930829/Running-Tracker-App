@@ -1,6 +1,8 @@
 package com.jhkim.runningtracker.presentation.service
 
+import com.jhkim.runningtracker.core.util.TrackingCalculator
 import com.jhkim.runningtracker.domain.location.LocationClient
+import com.jhkim.runningtracker.domain.model.LocationPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +20,9 @@ class TrackingManager(
 
     private var timerJob: Job? = null
     private var locationJob: Job? = null
+
+    private var lastLocation: LocationPoint? = null
+    private var distanceInMeters = 0.0
 
     fun startTracking(scope: CoroutineScope) {
         _state.update {
@@ -58,7 +63,23 @@ class TrackingManager(
                 _state.update { currentState ->
                     if (!currentState.isTracking) return@update currentState
 
-                    currentState.copy(pathPoints = (currentState.pathPoints + point).toList())
+                    val distance = lastLocation?.let { last ->
+                        TrackingCalculator.calculateDistance(
+                            last.latitude, last.longitude,
+                            point.latitude, point.longitude,
+                        )
+                    } ?: 0.0
+
+                    distanceInMeters += distance
+                    lastLocation = point
+
+                    val avgSpeed = TrackingCalculator.calculateAvgSpeed(distanceInMeters, currentState.timeInMillis)
+
+                    currentState.copy(
+                        pathPoints = (currentState.pathPoints + point).toList(),
+                        distanceInMeters = distanceInMeters,
+                        avgSpeedInKMH = avgSpeed,
+                    )
 
                 }
             }.launchIn(scope)
