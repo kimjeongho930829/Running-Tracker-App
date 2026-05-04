@@ -6,7 +6,10 @@ import com.jhkim.runningtracker.domain.use_case.DeleteRunUseCase
 import com.jhkim.runningtracker.domain.use_case.GetRunsUseCase
 import com.jhkim.runningtracker.domain.use_case.SaveRunUseCase
 import com.jhkim.runningtracker.presentation.MainViewModel
+import com.jhkim.runningtracker.presentation.service.RunningTimer
 import com.jhkim.runningtracker.presentation.service.TrackingManager
+import com.jhkim.runningtracker.presentation.service.TrackingNotificationHelper
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -17,7 +20,9 @@ val appModule = module {
     single { GetRunsUseCase(get()) }
     single { SaveRunUseCase(get()) }
 
-    single { TrackingManager() }
+    single { RunningTimer() }
+    single { TrackingManager(get()) }
+    single { TrackingNotificationHelper(androidContext()) }
 
     viewModel {
         MainViewModel(
