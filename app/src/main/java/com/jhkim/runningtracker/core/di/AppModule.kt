@@ -14,8 +14,6 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
-    single<RunRepository> { MockRunRepositoryImpl() }
-
     single { DeleteRunUseCase(get()) }
     single { GetRunsUseCase(get()) }
     single { SaveRunUseCase(get()) }

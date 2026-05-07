@@ -2,8 +2,8 @@ package com.jhkim.runningtracker
 
 import android.app.Application
 import com.jhkim.runningtracker.core.di.appModule
+import com.jhkim.runningtracker.core.di.flavorModule
 import com.jhkim.runningtracker.core.di.mapModule
-import com.jhkim.runningtracker.core.id.locationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -19,7 +19,7 @@ class RunningTrackerApplication: Application() {
             modules(
                 appModule,
                 mapModule,
-                locationModule
+                flavorModule,
             )
         }
     }
